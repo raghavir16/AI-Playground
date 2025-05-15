@@ -1,21 +1,28 @@
-function submitBrief() {
-    const brief = document.getElementById('brief').value;
-    document.getElementById('output').textContent = "Generating proposal...";
+function submitRequirements() {
+    const requirements = document.getElementById('input-requirements').value.trim();
+    const output = document.getElementById('output');
+    
+    if (!requirements) {
+        output.textContent = "Please enter your project brief.";
+        return;
+    }
+
+    output.textContent = "Generating proposal...";
 
     fetch('/generate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ brief: brief })
+        body: JSON.stringify({ requirements: requirements })
     })
     .then(res => res.json())
     .then(data => {
         if (data.proposal) {
-            document.getElementById('output').textContent = data.proposal;
+            output.textContent = data.proposal;
         } else {
-            document.getElementById('output').textContent = "Error: " + (data.error || 'Unknown');
+            output.textContent = "Error: " + (data.error || 'Unknown error');
         }
     })
     .catch(err => {
-        document.getElementById('output').textContent = "Request failed.";
+        output.textContent = "Request failed: " + err.message;
     });
 }
