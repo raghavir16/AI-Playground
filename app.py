@@ -1,6 +1,5 @@
 from flask import Flask, request, jsonify, send_from_directory
-from agentic_ai_core import generate_proposal
-import os
+from agentic_ai import generate_proposal
 
 app = Flask(__name__, static_folder='static')
 
@@ -11,12 +10,16 @@ def index():
 @app.route('/generate', methods=['POST'])
 def generate():
     data = request.get_json()
-    client_brief = data.get('brief', '')
-    if not client_brief:
-        return jsonify({'error': 'Brief is required'}), 400
+    requirements = data.get('requirements', '')
 
-    proposal = generate_proposal(client_brief)
-    return jsonify({'proposal': proposal})
+    if not requirements.strip():
+        return jsonify({'error': 'Requirements are required'}), 400
+
+    try:
+        proposal = generate_proposal(requirements)
+        return jsonify({'proposal': proposal})
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
