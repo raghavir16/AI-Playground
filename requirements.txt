@@ -1,0 +1,7 @@
+pyautogen>=0.2.0
+python-docx>=0.8.11
+openai>=1.0.0
+python-dotenv>=0.19.0
+pydantic>=2.0.0
+diagrams>=0.21.1
+graphviz>=0.20.1 
